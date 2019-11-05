@@ -34,6 +34,7 @@ const createBookmark = function(title) {
         body: newBookmark
     });
 };
+
 const deleteBookmark = function(id) {
     return apiFetch(BASE_URL + '/bookmarks/' +id, {
         method: 'DELETE'

@@ -1,39 +1,12 @@
 //import statements
+import api from './api';
+import store from './store';
 
-//
-function renderBookmarks() {
-
-}
-
-//
-function filterBookmarks() {
-
-}
-
-//
-function addBookmark() {
-
-}
-
-//
-function expandBookmark() {
-
-}
-
-//
-function deleteBookmark() {
-
-}
-
-//
 const main = function() {
-    renderBookmarks();
-    filterBookmarks();
-    addBookmark();
-    expandBookmark();
-    deleteBookmark();
-}
-
+  api.getBookmarks()
+    .then((bookmarks) => {
+      bookmarks.forEach((bookmark) => store.addBookmark(bookmarks));
+      //RENDER FUNCTION
+    });
+};
 //call the main function
-
-//export statements

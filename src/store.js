@@ -28,7 +28,7 @@ let error = null;
 let filter = 0;
 
 /*bookmarks should have {
-    id: from CUID
+    id: from api
     title: something
     url: http://www.something.com
     description: optional
@@ -36,13 +36,40 @@ let filter = 0;
     expanded: true or false
 } */
 
+const findById = function(id) {
+  return this.bookmarks.find(currentBookmark => currentBookmark.id === id);
+};
+
 const addBookmark = function(newBookmark) {
   this.store.bookmarks.push(newBookmark);
+};
+
+const findAndDelete = function(id) {
+  this.bookmarks = this.items.filter(currentBookmark => currentBookmark.id !== id);
+};
+
+const toggleExpand = function() {
+  this.expanded = !this.expanded;
+};
+
+const findAndUpdate = function (id, newData) {
+  const currentBookmark = this.findById(id);
+  Object.assign(currentBookmark, newData);
+};
+
+const setError = function(error) {
+  this.error = error;
 };
 
 export default {
   bookmarks,
   adding,
   error,
-  filter
+  filter,
+  findById,
+  addBookmark,
+  findAndDelete,
+  findAndUpdate,
+  toggleExpand,
+  setError
 }

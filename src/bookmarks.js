@@ -10,12 +10,12 @@ const generateBookmarkList = function(bookmarks) {
     let expandDescription = bookmark.description;
     if (bookmark.expanded === false) {
       return `
-        <li>
+        <li class="list-item" data-id="${bookmark.id}">
             <p>${listTitle}<span>Rating: ${listRating}</span></p>
             <button class="expand">Expand</button>
         </li>`; 
     } else {return `
-            <li>
+            <li class="expanded-item">
                 <p>${listTitle}<span>Rating: ${listRating}</span></p>
                 <button class="delete-bookmark">Delete</button>
                 <p class="bookmark-url">url: ${expandUrl}</p>
@@ -29,18 +29,54 @@ const generateBookmarkList = function(bookmarks) {
   </ul>`;
 };
 
-//render bookmarks from store!
+const generateError = function(message) {
+  return ` <section class="error-content">
+    <button id="cancel-error">X</button>
+    <p>${message}</p>
+    </section>`;
+};
+
+const renderError = function() {
+  if (store.error) {
+    const el = generateError(store.error);
+    $('.error-container').html(el);
+  } else {$('.error-container').empty();
+  }
+};
+
+const handleCloseError = function() {
+  $('.error-container').on('click', '#cancel-error', () => {
+    store.setError(null);
+    renderError();
+  });
+};
+
+//render bookmarks from api
 const render = function() {
   let bookmarks = store.bookmarks;
   const bookmarkString = generateBookmarkList(bookmarks);
   $('main').html(bookmarkString);
-  //add change to view if expanded
 };
 
+const getBookmarkIdFromElement = function(bookmark) {
+  return $('.expand').closest('li').data('data-id')
+};
+
+//if expand button clicked, toggle expand in api, 
+//update STORE, and rerender
 const handleExpandBookmark = function() {
-  //If expand button clicked, toggle expand in STORE and rerender
-  $('main').find('.expand').on('click', function() {
-    //toggle expanded at the right bookmarks index
+  $('main').find('.expand').on('click', event => {
+    const id = getBookmarkIdFromElement(event.currentTarget);
+    console.log(id);
+    const bookmark = store.findById(id);
+    api.updateBookmark(id, {expanded: !bookmark.expanded})
+      .then(() => {
+        store.findAndUpdate(id, {expanded: !bookmark.expanded});
+      })
+      .catch((err) => {
+        store.setError(err.message);
+        renderError();
+      });
   });
   render();
 };
@@ -51,6 +87,7 @@ const handleAddBookmark = function() {
 
 const bindEventListeners = function() {
   handleAddBookmark();
+  handleExpandBookmark();
 };
 
 //render will be exported when completed

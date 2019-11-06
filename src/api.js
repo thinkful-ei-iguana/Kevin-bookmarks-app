@@ -35,6 +35,15 @@ const createBookmark = function(title) {
   });
 };
 
+const updateBookmark = function(id, updateData) {
+  const newData = JSON.stringify(updateData);
+  return apiFetch(`${BASE_URL}/items/${id}`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json'},
+    body: newData
+  });
+}
+
 const deleteBookmark = function(id) {
   return apiFetch(BASE_URL + '/bookmarks/' +id, {
     method: 'DELETE'
@@ -44,5 +53,6 @@ const deleteBookmark = function(id) {
 export default {
   getBookmarks,
   createBookmark,
-  deleteBookmark
+  deleteBookmark,
+  updateBookmark
 };

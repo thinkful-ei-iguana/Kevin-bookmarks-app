@@ -1,7 +1,5 @@
-import api from './api';
-import store from './store';
-import bookmarks from './store';
-import $ from 'jquery';
+import api from './api.js';
+import store from './store.js';
 
 const main = function() {
   api.getBookmarks()
@@ -9,6 +7,8 @@ const main = function() {
       bookmarks.forEach((bookmark) => store.addBookmark(bookmarks));
       bookmarks.render();
     });
+    console.log('Trying to log first bookmark');
+    console.log(store.bookmarks[0]);
   bookmarks.bindEventListeners();
   bookmarks.render();
 };

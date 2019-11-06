@@ -14,7 +14,7 @@ const store = {
     description: 'dolorum tempore deserunt',
     expanded: false
   } 
-],
+  ],
   adding: false,
   error: null,
   filter: 0
@@ -30,9 +30,9 @@ const store = {
 } */
 
 const addBookmark = function(title) {
-    this.store.bookmarks.push(title);
+  this.store.bookmarks.push(title);
 };
 
-export {
-    store
-}
+export default {
+  store
+};

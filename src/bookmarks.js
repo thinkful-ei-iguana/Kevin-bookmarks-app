@@ -1,7 +1,5 @@
-import $ from 'jquery';
-
-import store from './store';
-import api from './api';
+import store from './store.js';
+import api from './api.js';
 
 //generate element to put in html
 const generateBookmarkElement = function(bookmarks) {
@@ -14,7 +12,7 @@ const generateBookmarkElement = function(bookmarks) {
         </li>`;
 };
 
-console.log(generateBookmarkElement(store.bookmarks[0]));
+console.log(generateBookmarkElement(store.bookmarks));
 
 const generateBookmarkString = function(bookmarks) {
   const bookmarkList = store.bookmarks.map((bookmark) => generateBookmarkElement(bookmark));
@@ -28,8 +26,13 @@ const render = function() {
   $('main').html(bookmarkString);
 };
 
+const handleExpandBookmark = function() {
+  //If expand button clicked, toggle expand in STORE and rerender
+  render();
+};
+
 const handleAddBookmark = function() {
-    
+  //If add button clicked, toggle adding to true in main object
 };
 
 const bindEventListners = function() {

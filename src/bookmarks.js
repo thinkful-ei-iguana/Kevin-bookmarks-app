@@ -11,13 +11,14 @@ const generateBookmarkList = function(bookmarks) {
     if (bookmark.expanded === false) {
       return `
         <li class="list-item" data-id="${bookmark.id}">
-            <p>${listTitle}<span>Rating: ${listRating}</span></p>
+            <p class="${listTitle}">${listTitle}<span>Rating: ${listRating}</span></p>
             <button class="expand">Expand</button>
         </li>`; 
     } else {return `
-            <li class="expanded-item">
-                <p>${listTitle}<span>Rating: ${listRating}</span></p>
+            <li class="expanded-item" data-id="${bookmark.id}">
+                <p class="${listTitle}">${listTitle}<span>Rating: ${listRating}</span></p>
                 <button class="delete-bookmark">Delete</button>
+                <button class="shrink">Shrink</button>
                 <p class="bookmark-url">url: ${expandUrl}</p>
                 <button class="link">Visit Site</button>
                 <p>${expandDescription}</p>
@@ -36,6 +37,7 @@ const generateError = function(message) {
     </section>`;
 };
 
+//add to the front of html by 'html = `<div> ${store.error} </div>` + html
 const renderError = function() {
   if (store.error) {
     const el = generateError(store.error);
@@ -54,40 +56,85 @@ const handleCloseError = function() {
 //render bookmarks from api
 const render = function() {
   let bookmarks = store.bookmarks;
-  const bookmarkString = generateBookmarkList(bookmarks);
-  $('main').html(bookmarkString);
+  if (store.filter > 0) {
+    bookmarks = bookmarks.filter(bookmark => bookmark.rating >= store.filter);
+  }
+  let html;
+  if (store.adding) {html = `<form action="add-new">
+      <label for="title">Site name</label>
+      <input type="text" name="title" id="title" placeholder="example site" required>
+      <label for="url">Site url</label>
+      <input type="text" name="url" id="url" placeholder="http://example.com/" required>
+      <label for="rating">Rating</label>
+      <input type="radio" name="rating" value="1" id="rating" required>1
+      <input type="radio" name="rating" value="2" id="rating" required>2
+      <input type="radio" name="rating" value="3" id="rating" required>3
+      <input type="radio" name="rating" value="4" id="rating" required>4
+      <input type="radio" name="rating" value="5" id="rating" required>5
+      <label for="description"></label>
+      <input type="text" name="description" placeholder="add a description (optional)">
+    </form>
+    <button class="cancel">Cancel</button>
+    <button class="create">Create</button>`;
+  }else {html = generateBookmarkList(bookmarks);}
+  if (store.error) {
+    renderError();
+  }else $('main').html(html);
 };
 
 const getBookmarkIdFromElement = function(bookmark) {
-  return $('.expand').closest('li').data('data-id')
+  return $(bookmark).closest('li').data('id');
 };
 
 //if expand button clicked, toggle expand in api, 
 //update STORE, and rerender
 const handleExpandBookmark = function() {
-  $('main').find('.expand').on('click', event => {
+  $('main').on('click', '.expand', event => {
     const id = getBookmarkIdFromElement(event.currentTarget);
-    console.log(id);
     const bookmark = store.findById(id);
-    api.updateBookmark(id, {expanded: !bookmark.expanded})
-      .then(() => {
-        store.findAndUpdate(id, {expanded: !bookmark.expanded});
-      })
-      .catch((err) => {
-        store.setError(err.message);
-        renderError();
-      });
+    store.findAndUpdate(id, {expanded: !bookmark.expanded});
+    render();
   });
-  render();
+};
+
+const handleShrinkBookmark = function() {
+  $('main').on('click', '.shrink', event => {
+    const id = getBookmarkIdFromElement(event.currentTarget);
+    const bookmark = store.findById(id);
+    store.findAndUpdate(id, {expanded: !bookmark.expanded});
+    render();
+  });
 };
 
 const handleAddBookmark = function() {
-  //If add button clicked, toggle adding to true in main object
+  $('#add-button').on('click', event => {
+    store.adding = !store.adding;
+    render();
+  });
 };
+
+const handleCancelBookmark = function() {
+  $('main').on('click', '.cancel', event => {
+    store.adding = !store.adding;
+    render();
+  });
+};
+
+const handleSelectFilter = function() {
+  $('#filter').on('change', event => {
+    let filterValue = $('#filter').val();
+    store.filter = filterValue;
+    render();
+  });
+}
 
 const bindEventListeners = function() {
   handleAddBookmark();
   handleExpandBookmark();
+  handleShrinkBookmark();
+  handleCloseError();
+  handleCancelBookmark();
+  handleSelectFilter();
 };
 
 //render will be exported when completed

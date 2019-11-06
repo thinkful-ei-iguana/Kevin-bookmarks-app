@@ -61,6 +61,10 @@ const setError = function(error) {
   this.error = error;
 };
 
+//hook up add button
+
+//hook up select field
+
 export default {
   bookmarks,
   adding,

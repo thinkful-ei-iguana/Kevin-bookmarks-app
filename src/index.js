@@ -1,14 +1,14 @@
 import api from './api.js';
 import store from './store.js';
+import bookmarks from './bookmarks.js';
+console.log(bookmarks);
 
 const main = function() {
   api.getBookmarks()
-    .then((bookmarks) => {
-      bookmarks.forEach((bookmark) => store.addBookmark(bookmarks));
+    .then((bookmarksData) => {
+      bookmarksData.forEach((bookmark) => store.addBookmark(bookmark));
       bookmarks.render();
     });
-    console.log('Trying to log first bookmark');
-    console.log(store.bookmarks[0]);
   bookmarks.bindEventListeners();
   bookmarks.render();
 };

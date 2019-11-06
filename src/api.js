@@ -23,26 +23,26 @@ const apiFetch = function() {
 };
 
 const getBookmarks = function() {
-    return apiFetch(`${BASE_URL}/bookmarks`)
+  return apiFetch(`${BASE_URL}/bookmarks`);
 };
 
 const createBookmark = function(title) {
-    const newBookmark = JSON.stringify({title});
-    return apiFetch(`${BASE_URL}/bookmarks`, {
-        method: 'POST',
-        headers: {'Content-Type: 'application/json},
-        body: newBookmark
-    });
+  const newBookmark = JSON.stringify({title});
+  return apiFetch(`${BASE_URL}/bookmarks`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: newBookmark
+  });
 };
 
 const deleteBookmark = function(id) {
-    return apiFetch(BASE_URL + '/bookmarks/' +id, {
-        method: 'DELETE'
-    });
+  return apiFetch(BASE_URL + '/bookmarks/' +id, {
+    method: 'DELETE'
+  });
 };
 
 export {
-    getBookmarks,
-    createBookmark,
-    deleteBookmark
+  getBookmarks,
+  createBookmark,
+  deleteBookmark
 };

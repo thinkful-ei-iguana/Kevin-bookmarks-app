@@ -3,7 +3,7 @@ let bookmarks = [{
   title: 'Title 1',
   rating: 3,
   url: 'http://www.title1.com',
-  description: 'lorem ipsum dolor sit',
+  description: 'lorem ipsum dolor sit and then I added more to see how that worked',
   expanded: false
 },
 {

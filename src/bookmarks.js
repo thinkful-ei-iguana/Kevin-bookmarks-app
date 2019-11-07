@@ -1,5 +1,6 @@
 import store from './store.js';
 import api from './api.js';
+import form from './form.js';
 
 //for each bookmarks element generate element to put in html
 const generateBookmarkList = function(bookmarks) {
@@ -7,7 +8,7 @@ const generateBookmarkList = function(bookmarks) {
     let listTitle = bookmark.title;
     let listRating = bookmark.rating;
     let expandUrl = bookmark.url;
-    let expandDescription = bookmark.description;
+    let expandDescription = bookmark.desc;
     if (bookmark.expanded === false) {
       return `
         <li class="list-item" data-id="${bookmark.id}">
@@ -59,7 +60,7 @@ const render = function() {
     bookmarks = bookmarks.filter(bookmark => bookmark.rating >= store.filter);
   }
   let html;
-  if (store.adding) {html = `<form class="add-new" action="add-new">
+  if (store.adding) {html = `<form class="add-new">
       <label for="title">Site name</label>
       <input type="text" name="title" id="title" placeholder="example site" required>
       <label for="url">Site url</label>
@@ -71,11 +72,11 @@ const render = function() {
       <input type="radio" name="rating" value="4" id="rating" required>4
       <input type="radio" name="rating" value="5" id="rating" required>5
       </label>
-      <label for="description"></label>
-      <input class="description" type="text" name="description" placeholder="add a description (optional)">
-    </form>
-    <button class="cancel">Cancel</button>
-    <button class="create">Create</button>`;
+      <label for="desc"></label>
+      <input class="description" type="text" name="desc" placeholder="add a description (optional)">
+      <button class="cancel">Cancel</button>
+      <input type="submit" class="create"></input>
+    </form>`;
   }else {html = generateBookmarkList(bookmarks);}
   if (store.error) {
     renderError();
@@ -112,14 +113,20 @@ const handleAddBookmark = function() {
   });
 };
 
-//THIS IS WHERE YOU ARE
-//THIS IS WHERE YOU ARE
 const handleCreateBookmark = function() {
-
-}
+  $('main').on('submit', '.add-new', (event => {
+    event.preventDefault();
+    let formElement = form.serializeJson($('.add-new')[0]);
+    api.createBookmark(formElement);
+    $('#add-button').removeClass('hidden');
+    store.adding = !store.adding;
+    render();
+  }));
+};
 
 const handleCancelBookmark = function() {
   $('main').on('click', '.cancel', event => {
+    event.preventDefault();
     $('#add-button').removeClass('hidden');
     store.adding = !store.adding;
     render();
@@ -158,6 +165,7 @@ const bindEventListeners = function() {
   handleCancelBookmark();
   handleSelectFilter();
   handleDeleteBookmark();
+  handleCreateBookmark();
 };
 
 //render will be exported when completed

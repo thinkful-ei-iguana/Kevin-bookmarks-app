@@ -1,6 +1,5 @@
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/kevin';
 
-//NEEDS ARGS
 const apiFetch = function(...args) {
   let error;
   return fetch(...args)
@@ -26,12 +25,12 @@ const getBookmarks = function() {
   return apiFetch(`${BASE_URL}/bookmarks`);
 };
 
-const createBookmark = function(title) {
-  const newBookmark = JSON.stringify({title});
+const createBookmark = function(formData) {
+  console.log(formData);
   return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: newBookmark
+    body: formData
   });
 };
 

@@ -81,6 +81,7 @@ const render = function() {
   if (store.error) {
     renderError();
   }else $('main').html(html);
+  api.getBookmarks();
 };
 
 const getBookmarkIdFromElement = function(bookmark) {
@@ -108,6 +109,7 @@ const handleShrinkBookmark = function() {
 const handleAddBookmark = function() {
   $('#add-button').on('click', event => {
     $('#add-button').addClass('hidden');
+    $('#add-label').addClass('hidden');
     store.adding = !store.adding;
     render();
   });
@@ -117,9 +119,11 @@ const handleCreateBookmark = function() {
   $('main').on('submit', '.add-new', (event => {
     event.preventDefault();
     let formElement = form.serializeJson($('.add-new')[0]);
-    api.createBookmark(formElement);
     $('#add-button').removeClass('hidden');
+    $('#add-label').removeClass('hidden');
     store.adding = !store.adding;
+    api.createBookmark(formElement);
+    store.addBookmark(formElement);
     render();
   }));
 };
@@ -168,7 +172,6 @@ const bindEventListeners = function() {
   handleCreateBookmark();
 };
 
-//render will be exported when completed
 export default {
   render,
   bindEventListeners

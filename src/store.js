@@ -8,13 +8,11 @@ const findById = function(id) {
 };
 
 const addBookmark = function(newBookmark) {
-  console.log('inside addBookmark: ');
-  console.log(newBookmark);
   this.bookmarks.push(newBookmark);
 };
 
 const findAndDelete = function(id) {
-  this.bookmarks = this.items.filter(currentBookmark => currentBookmark.id !== id);
+  this.bookmarks = this.bookmarks.filter(currentBookmark => currentBookmark.id !== id);
 };
 
 const toggleExpand = function() {

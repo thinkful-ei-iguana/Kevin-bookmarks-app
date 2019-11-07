@@ -8,7 +8,7 @@ body {
     height: 100vh;
 }
 
-form button.hidden {
+form .hidden {
     visibility: hidden;
 }
 
@@ -29,8 +29,9 @@ header {
     background-color: white;
 }
 
-header label {
-    display: none;
+header form label {
+    font-style: white;
+    background: white;
 }
 
 h1 {
@@ -181,10 +182,6 @@ button.create {
     height: 40%;
 }
 
-@media screen and (min-width: 768px) {
-
-}
-
-@media screen and (min-width: 1280px) {
-
+li p {
+    width: 1600px;
 }

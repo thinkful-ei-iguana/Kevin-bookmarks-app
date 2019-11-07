@@ -112,6 +112,12 @@ const handleAddBookmark = function() {
   });
 };
 
+//THIS IS WHERE YOU ARE
+//THIS IS WHERE YOU ARE
+const handleCreateBookmark = function() {
+
+}
+
 const handleCancelBookmark = function() {
   $('main').on('click', '.cancel', event => {
     $('#add-button').removeClass('hidden');
@@ -126,7 +132,23 @@ const handleSelectFilter = function() {
     store.filter = filterValue;
     render();
   });
-}
+};
+
+const handleDeleteBookmark = function() {
+  $('main').on('click', '.delete-bookmark', event => {
+    const id = getBookmarkIdFromElement(event.currentTarget);
+    api.deleteBookmark(id)
+      .then(() => {
+        store.findAndDelete(id);
+        render();
+      })
+      .catch((err) => {
+        console.log(err);
+        store.setError(err.message);
+        renderError();
+      });
+  });
+};
 
 const bindEventListeners = function() {
   handleAddBookmark();
@@ -135,6 +157,7 @@ const bindEventListeners = function() {
   handleCloseError();
   handleCancelBookmark();
   handleSelectFilter();
+  handleDeleteBookmark();
 };
 
 //render will be exported when completed

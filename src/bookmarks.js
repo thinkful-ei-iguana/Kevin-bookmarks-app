@@ -119,11 +119,14 @@ const handleCreateBookmark = function() {
   $('main').on('submit', '.add-new', (event => {
     event.preventDefault();
     let formElement = form.serializeJson($('.add-new')[0]);
+    console.log(formElement);
     $('#add-button').removeClass('hidden');
     $('#add-label').removeClass('hidden');
     store.adding = !store.adding;
-    api.createBookmark(formElement);
+    //this is currently undefined
     store.addBookmark(formElement);
+    console.log(store.bookmarks);
+    api.createBookmark(formElement);
     render();
   }));
 };

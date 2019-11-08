@@ -8,6 +8,7 @@ const findById = function(id) {
 };
 
 const addBookmark = function(newBookmark) {
+  console.log(newBookmark);
   this.bookmarks.push(newBookmark);
 };
 
@@ -27,10 +28,6 @@ const findAndUpdate = function (id, newData) {
 const setError = function(error) {
   this.error = error;
 };
-
-//hook up add button
-
-//hook up select field
 
 export default {
   bookmarks,

@@ -13,4 +13,6 @@ const main = function() {
   bookmarks.render();
 };
 
+console.log(bookmarks);
+
 $(main);

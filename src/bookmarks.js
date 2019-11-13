@@ -118,14 +118,12 @@ const handleAddBookmark = function() {
 const handleCreateBookmark = function() {
   $('main').on('submit', '.add-new', (event => {
     event.preventDefault();
+    console.log($('.add-new')[0]);
     let formElement = form.serializeJson($('.add-new')[0]);
-    console.log(formElement);
     $('#add-button').removeClass('hidden');
     $('#add-label').removeClass('hidden');
     store.adding = !store.adding;
-    //this is currently undefined
-    store.addBookmark(formElement);
-    console.log(store.bookmarks);
+    store.addBookmark(JSON.parse(formElement));
     api.createBookmark(formElement);
     render();
   }));

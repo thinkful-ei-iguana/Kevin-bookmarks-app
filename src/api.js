@@ -26,6 +26,7 @@ const getBookmarks = function() {
 };
 
 const createBookmark = function(formData) {
+  //this is logging correctly
   console.log(formData);
   return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',

@@ -8,7 +8,6 @@ const findById = function(id) {
 };
 
 const addBookmark = function(newBookmark) {
-  console.log(newBookmark);
   this.bookmarks.push(newBookmark);
 };
 

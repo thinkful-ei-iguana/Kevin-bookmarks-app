@@ -26,7 +26,7 @@ const getBookmarks = function() {
 };
 
 const createBookmark = function(formData) {
-  //this is logging correctly
+  //this is logging without the expanded propery
   console.log(formData);
   return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',

@@ -4,7 +4,11 @@ import form from './form.js';
 
 //for each bookmarks element generate element to put in html
 const generateBookmarkList = function(bookmarks) {
+  console.log(bookmarks.length);
+  console.log(bookmarks[0]);
+  console.log(bookmarks);
   const bookmarkItems = bookmarks.map(function(bookmark) {
+    console.log(bookmark);
     let listTitle = bookmark.title;
     let listRating = bookmark.rating;
     let expandUrl = bookmark.url;
@@ -53,14 +57,28 @@ const handleCloseError = function() {
   });
 };
 
+//check store.addBookmark for why its an array with length 0 but 2 things inside between here and the store.addBookmark fxn
+const testFunction = function() {
+  api.getBookmarks()
+    .then((bookmarksData) => {
+      bookmarksData.forEach((bookmark) => {
+        store.addBookmark(bookmark);});
+    });
+};
+
 //render bookmarks from api
 const render = function() {
+  testFunction();
+  console.log(store.bookmarks);
   let bookmarks = store.bookmarks;
   if (store.filter > 0) {
     bookmarks = bookmarks.filter(bookmark => bookmark.rating >= store.filter);
   }
+  console.log(bookmarks);
   let html;
-  if (store.adding) {html = `<form class="add-new">
+  if (store.adding) {
+    console.log('we are adding');
+    html = `<form class="add-new">
       <label for="title">Site name</label>
       <input type="text" name="title" id="title" placeholder="example site" required>
       <label for="url">Site url</label>
@@ -77,11 +95,13 @@ const render = function() {
       <button class="cancel">Cancel</button>
       <input type="submit" class="create"></input>
     </form>`;
-  }else {html = generateBookmarkList(bookmarks);}
+  }else{
+    console.log('getting bookmarks')
+    html = generateBookmarkList(bookmarks);}
   if (store.error) {
     renderError();
   }else $('main').html(html);
-  api.getBookmarks();
+  //api.getBookmarks();
 };
 
 const getBookmarkIdFromElement = function(bookmark) {
@@ -90,8 +110,10 @@ const getBookmarkIdFromElement = function(bookmark) {
 
 const handleExpandBookmark = function() {
   $('main').on('click', '.expand', event => {
+    console.log(event.currentTarget);
     const id = getBookmarkIdFromElement(event.currentTarget);
     const bookmark = store.findById(id);
+    //this is where we are getting a new error
     store.findAndUpdate(id, {expanded: !bookmark.expanded});
     render();
   });
@@ -101,6 +123,7 @@ const handleShrinkBookmark = function() {
   $('main').on('click', '.shrink', event => {
     const id = getBookmarkIdFromElement(event.currentTarget);
     const bookmark = store.findById(id);
+    //because of the error on line 95 there is probably one here too
     store.findAndUpdate(id, {expanded: !bookmark.expanded});
     render();
   });
@@ -115,6 +138,7 @@ const handleAddBookmark = function() {
   });
 };
 
+/* Preserving a working function
 const handleCreateBookmark = function() {
   $('main').on('submit', '.add-new', (event => {
     event.preventDefault();
@@ -123,7 +147,30 @@ const handleCreateBookmark = function() {
     $('#add-button').removeClass('hidden');
     $('#add-label').removeClass('hidden');
     store.adding = !store.adding;
+    //checking if object
+    console.log(JSON.parse(formElement));
     store.addBookmark(JSON.parse(formElement));
+    api.createBookmark(formElement);
+    render();
+  }));
+};
+*/
+
+const handleCreateBookmark = function() {
+  $('main').on('submit', '.add-new', (event => {
+    event.preventDefault();
+    console.log(form);
+    let formElement = form.serializeJson($('.add-new')[0]);
+    $('#add-button').removeClass('hidden');
+    $('#add-label').removeClass('hidden');
+    store.adding = !store.adding;
+    //testing add key value pair on creation to fix button stuckness
+    let expandTest = JSON.parse(formElement);
+    expandTest.expanded = false;
+    console.log(expandTest);
+    //end test: it has the expanded property here
+    store.addBookmark(expandTest);
+    //The item now comes shrunk (good!) but the expand button does not work (bad!).  It also expands on a refresh
     api.createBookmark(formElement);
     render();
   }));

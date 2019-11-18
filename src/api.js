@@ -26,7 +26,7 @@ const getBookmarks = function() {
 };
 
 const createBookmark = function(formData) {
-  //this is logging without the expanded propery
+  //this is logging without the expanded properly
   console.log(formData);
   return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',
@@ -42,7 +42,7 @@ const updateBookmark = function(id, updateData) {
     headers: {'Content-Type': 'application/json'},
     body: newData
   });
-}
+};
 
 const deleteBookmark = function(id) {
   return apiFetch(BASE_URL + '/bookmarks/' +id, {

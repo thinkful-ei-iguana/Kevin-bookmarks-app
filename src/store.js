@@ -1,29 +1,23 @@
-let bookmarks = [];
+let bookmarks = {};
 let adding = false;
 let error = null;
 let filter = 0;
 
 const findById = function(id) {
-  return this.bookmarks.find(currentBookmark => {
-    console.log(currentBookmark);
-    currentBookmark.id === id;});
+  return bookmarks[id];
 };
 
 const addBookmark = function(newBookmark) {
-  this.bookmarks.push(newBookmark);
-  console.log(Array.isArray(this.bookmarks));
+  newBookmark.expanded = false;
+  bookmarks[newBookmark.id] = newBookmark;
 };
 
 const findAndDelete = function(id) {
-  this.bookmarks = this.bookmarks.filter(currentBookmark => currentBookmark.id !== id);
-};
-
-const toggleExpand = function() {
-  this.expanded = !this.expanded;
+  delete bookmarks[id];
 };
 
 const findAndUpdate = function (id, newData) {
-  const currentBookmark = this.findById(id);
+  const currentBookmark = findById(id);
   Object.assign(currentBookmark, newData);
 };
 
@@ -40,6 +34,5 @@ export default {
   addBookmark,
   findAndDelete,
   findAndUpdate,
-  toggleExpand,
   setError
 }
